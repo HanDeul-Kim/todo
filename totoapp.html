@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="initial-scale=1.0,user-scalble=no,maximum-scale=1,width=device-width /">
     <title>난희의 일정 관리</title>
     <style>
         *{
@@ -123,6 +123,7 @@
                 createEl(todoValue);
             }
         })
+
         save.addEventListener('click', () => {
             let todoValue = input.value;
             if(todoValue !== '') {
@@ -158,7 +159,7 @@
             li.appendChild(closeBtn); 
         }
 
-        todoArr.forEach(createEl)
+        todoArr.forEach(createEl);
         
 
         // background image

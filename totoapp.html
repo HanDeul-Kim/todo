@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+            box-sizing:border-box;
+        }
+        ul,ol,li{list-style:none;}
+        a{
+            text-decoration: none;
+            color:#000;
+        }
+        html,body{width:100%; height:100%;}
+        body{
+            background: url('./images/bg1.jpg') no-repeat center center / cover;
+            padding: 20px;
+        }
+        .input-box{
+            display:flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom:50px;
+            height: 30px;
+            gap:10px;
+        }
+        input[type='text'] {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+            border:none;
+            outline:none;
+            padding:5px 10px;
+            border:2px solid transparent;
+            transition: 0.5s ease;
+        }
+        input:focus,
+        input:active {
+            border:2px solid dodgerblue;
+        }
+        .save{
+            height:100%;
+            padding:10px;
+            border-radius: 6px;
+            outline: none;
+            border:none;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            background: dodgerblue;
+            color:#fff;
+        }
+        ul > li {
+            width: 100%;
+            margin:10px;
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        ul > li > span {
+            color:#fff;
+            color:dodgerblue;
+            font-weight: bold;
+            font-size: 18px;
+            word-break: break-all;
+        }
+        ul > li > button {
+            padding: 5px;
+            border-radius: 6px;
+            border: 1px solid #fff;
+            white-space: nowrap;
+        }
+        li{
+            transition:1s linear;
+        }
+
+        .date-wrap {
+            margin-bottom:20px;
+        }
+        #weather {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            color:#fff;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div id="weather">
+        <img id="icon" src="" alt="">
+    </div>
+    <div class="date-wrap">
+        <div id="date"></div>
+    </div>
+    <div class="input-box">
+        <input id="input" type="text" placeholder="난희가 할 일 등록해봐!">
+        <button class="save">save</button>
+    </div>
+    <ul class="todo"></ul>
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        const input = document.getElementById('input');
+        const save = document.querySelector('.save');
+        const todo = document.querySelector('.todo');
+
+        let todoArr = JSON.parse(localStorage.getItem('todo')) || [];
+
+        input.addEventListener('keydown', (e) => {
+            if(e.keyCode == '13' && input.value !== '') {
+                let todoValue = input.value;
+                todoArr.push(todoValue);
+                localStorage.setItem('todo', JSON.stringify(todoArr));
+                input.value = '';
+                createEl(todoValue);
+            }
+        })
+        save.addEventListener('click', () => {
+            let todoValue = input.value;
+            if(todoValue !== '') {
+                todoArr.push(todoValue);
+                localStorage.setItem('todo', JSON.stringify(todoArr));
+                input.value = '';
+                createEl(todoValue);
+            }
+        })
+
+
+        function createEl(text) {
+            const li = document.createElement('li');
+            li.className = 'todo_list';
+            const todoContent = document.createElement('span');
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '삭제'
+
+            // list 삭제
+            closeBtn.addEventListener('click', function() {
+                this.parentElement.remove();
+                const findIdx = todoArr.indexOf(text);
+                console.log(todoArr);
+
+                todoArr.splice(findIdx, 1);
+                // splice 삭제 후 localStorage값 저장
+                localStorage.setItem('todo', JSON.stringify(todoArr));
+            })
+            
+            todoContent.innerHTML = `${text}`;
+            todo.appendChild(li);
+            li.appendChild(todoContent);
+            li.appendChild(closeBtn); 
+        }
+
+        todoArr.forEach(createEl)
+        
+
+        // background image
+        let bgArr = ['bg1.jpg', 'bg2.jpg', 'bg3.jpg', 'bg4.jpg', 'bg5.jpg'];
+        const random = Math.floor(Math.random() * bgArr.length);
+
+        document.querySelector('body').style.background = `url('./images/${bgArr[random]}') no-repeat center center / cover`;
+
+        // new date
+        // const date = new Date;
+        // console.log(date);
+
+        // weather
+        
+        let weather = document.querySelector('#weather');
+        let city_name = 'Seoul';
+        let lat = 37.5666791;
+        let lon = 126.9782914;
+        const API_key = '71dc00c4ef28195bd596ae68034d5f11';
+
+        axios({
+            method: 'get',
+            url: `https://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${API_key}`
+        })
+        .then( function(response) {
+            const wCity = response.data.name;
+            const wData = response.data.weather[0].description;
+            const wTemp = (response.data.main.temp - 273.15).toFixed(1);
+            weather.innerHTML = `서울 ${wTemp}도(난희의 마음 온도)`;
+            const icon = response.data.weather[0].icon;
+            const wImg = document.querySelector('#icon');
+
+            const img = document.createElement('img');
+            img.src = `http://openweathermap.org/img/wn/${icon}.png`;
+            weather.appendChild(img);
+        })
+
+
+
+    </script>
+</body>
+</html>

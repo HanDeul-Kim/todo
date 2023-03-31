@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        ul,
+        ol,
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+        }
+
+        .todo-add-item {
+            border: 1px solid dodgerblue;
+            height: auto;
+            margin-top: 50px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        input {
+            height: 40px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        button {
+            height: 40px;
+            padding: 10px;
+            outline: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .todo_list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap:10px;
+        }
+
+        .todo_list li {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-wrap h1 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <div class="todo-add-item">
+        <div class="input-wrap">
+            <h1>일정을 등록하세요</h1>
+            <input type="text" id="myInput">
+            <button onclick="addTodo()" class="todo_btn">추가</button>
+        </div>
+        <ul class="todo_list"></ul>
+    </div>
+
+    <script>
+        const input = document.querySelector('input');
+        const todoBtn = document.querySelector('.todo_btn');
+        const todoUl = document.querySelector('.todo_list');
+
+        let myArr = JSON.parse(localStorage.getItem('todo')) || [];
+
+        function addTodo() {
+            let inputVal = input.value;
+            if (inputVal !== '') {
+                myArr.push(inputVal);
+                localStorage.setItem('todo', JSON.stringify(myArr))
+                console.log(JSON.parse(localStorage.getItem('todo')));
+                input.value = '';
+                createEl(inputVal);
+            }
+        }
+        
+        input.addEventListener('keydown', (e) => {
+            let inputVal = input.value;
+            if (e.keyCode === 13 && e.target.value !== '') {
+                myArr.push(inputVal);
+                localStorage.setItem('todo', JSON.stringify(myArr))
+                input.value = '';
+                createEl(inputVal);
+                
+            }
+        })
+
+        function createEl(content) {
+            if (JSON.parse(localStorage.getItem('todo')).length !== 0) {
+                const li = document.createElement('li');
+                const span = document.createElement('span');
+                const button = document.createElement('button');
+                button.className = 'delete_btn';
+                span.innerHTML = content;
+                button.innerHTML =
+                `
+                    X
+                `
+                button.addEventListener('click', function () {
+                    this.parentElement.remove();
+                    const findIndex = myArr.indexOf(content);
+                    myArr.splice(findIndex, 1);
+                    localStorage.setItem('todo', JSON.stringify(myArr))
+                })
+                todoUl.appendChild(li);
+                li.appendChild(span);
+                li.appendChild(button);
+            }
+        }
+        myArr.forEach(createEl);
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -188,7 +188,7 @@
             const wCity = response.data.name;
             const wData = response.data.weather[0].description;
             const wTemp = (response.data.main.temp - 273.15).toFixed(1);
-            weather.innerHTML = `서울 ${wTemp}도 ㅋ_ㅋ`;
+            weather.innerHTML = `지금 신대방은 ${wTemp}도 ㅋ_ㅋ`;
             const icon = response.data.weather[0].icon;
             const wImg = document.querySelector('#icon');
 

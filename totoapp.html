@@ -95,12 +95,12 @@
     <div id="weather">
         <img id="icon" src="" alt="">
     </div>
-    <h3 style="text-align: center; font-size:12px; color:#fff;">가끔은 잠시 내려놓는 시간이 필요해..! ^-^</h3>
+    <h3 style="text-align: center; font-size:12px; color:#fff;">이수경 행복하자</h3>
     <div class="date-wrap">
         <div id="date"></div>
     </div>
     <div class="input-box">
-        <input id="input" type="text" placeholder="난희가 할 일 등록해봐!">
+        <input id="input" type="text" placeholder="수경이의 할 일 목록 ㅇㅁㅇ">
         <button class="save">save</button>
     </div>
     <ul class="todo"></ul>
@@ -188,7 +188,7 @@
             const wCity = response.data.name;
             const wData = response.data.weather[0].description;
             const wTemp = (response.data.main.temp - 273.15).toFixed(1);
-            weather.innerHTML = `서울 ${wTemp}도(난희의 마음 온도)`;
+            weather.innerHTML = `서울 ${wTemp}도 ㅋ_ㅋ`;
             const icon = response.data.weather[0].icon;
             const wImg = document.querySelector('#icon');
 
